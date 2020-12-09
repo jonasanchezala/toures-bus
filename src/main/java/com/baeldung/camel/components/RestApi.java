@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class RestApi extends RouteBuilder {
 
     private static final String MICROSERVICE_ORDER_URL = "http://10.39.1.67:3000/orders";
+    private static final String MICROSERVICE_CAMPAIGN_URL = "http://10.39.1.67:3008/campaigns";
     private static final String MICROSERVICE_USER_URL = "http://10.39.1.49:8088/api/v1/User";
     private static final String MICROSERVICE_PRODUCT_URL = "http://10.39.1.67:8082/products";
 
@@ -56,7 +57,11 @@ public class RestApi extends RouteBuilder {
                 .get("/orders/detail?orderId={orderId}")
                     .bindingMode(RestBindingMode.json)
                     .outType(OrderUserResponse.class)
-                    .to("direct:getDetailOrderInfo");
+                    .to("direct:getDetailOrderInfo")
+                .get("/campaigns/detail?campaignId={campaignId}")
+                    .bindingMode(RestBindingMode.json)
+                    .outType(OrderUserResponse.class)
+                    .to("direct:getCampaignInfo");
 
 
         from("direct:getOrdersInfo")
@@ -76,6 +81,15 @@ public class RestApi extends RouteBuilder {
                 .to("direct:getOrderProducts")
                 .to("direct:getProductsInfo")
                 .to("direct:processDetailOrderInfo")
+                .end();
+
+        from("direct:getCampaignInfo")
+                .routeId("direct-routeGet3")
+                .tracing()
+                .to("direct:getCampaign")
+                .to("direct:getCampaignProducts")
+                .to("direct:getProductsInfo")
+                .to("direct:processCampaignInfo")
                 .end();
 
 
@@ -128,6 +142,29 @@ public class RestApi extends RouteBuilder {
                 .removeHeaders("CamelHttp*")
                 .process(new ProcessDetailOrderInfo())
                 .end();
+
+
+        from("direct:getCampaign")
+                .setHeader(Exchange.HTTP_PATH, simple("${header.campaignId}"))
+                .setHeader(Exchange.HTTP_URI, constant(MICROSERVICE_CAMPAIGN_URL))
+                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+                .toD(MICROSERVICE_CAMPAIGN_URL)
+                .process(new ProcessCampaign(objectMapper))
+                .end();
+
+        from("direct:getCampaignProducts")
+                .setHeader(Exchange.HTTP_PATH, simple("${header.campaignId}/product_campaigns"))
+                .setHeader(Exchange.HTTP_URI, constant(MICROSERVICE_CAMPAIGN_URL))
+                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+                .toD(MICROSERVICE_CAMPAIGN_URL)
+                .process(new ProcessCampaignProducts(objectMapper))
+                .end();
+
+        from("direct:processCampaignInfo")
+                .removeHeaders("CamelHttp*")
+                .process(new ProcessCampaignDetailInfo())
+                .end();
+
 
     }
 }

@@ -25,15 +25,18 @@ public class ProcessProductsInfo implements Processor {
 
         List<OrderProductsResponse> orderProducts = (List<OrderProductsResponse>) exchange.getProperty("orderProducts");
 
-        products.stream().forEach(product ->
-            product.setQuantity(
-                    orderProducts
-                            .stream()
-                            .filter(orderProductsResponse -> orderProductsResponse.getProduct_id() == product.getId())
-                            .findFirst()
-                            .get()
-                            .getCount())
-        );
+
+        if(orderProducts !=null && !orderProducts.isEmpty()){
+            products.stream().forEach(product ->
+                    product.setQuantity(
+                            orderProducts
+                                    .stream()
+                                    .filter(orderProductsResponse -> orderProductsResponse.getProduct_id() == product.getId())
+                                    .findFirst()
+                                    .get()
+                                    .getCount())
+            );
+        }
 
         exchange.setProperty("products", products);
     }
