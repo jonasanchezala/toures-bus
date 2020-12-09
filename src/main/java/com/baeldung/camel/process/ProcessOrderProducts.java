@@ -24,5 +24,6 @@ public class ProcessOrderProducts implements Processor {
         List<OrderProductsResponse> orderProducts = objectMapper.readValue(orderResponse, new TypeReference<List<OrderProductsResponse>>(){});
         List<String> productIds = orderProducts.stream().map(orderProduct -> Integer.toString(orderProduct.getProduct_id())).distinct().collect(Collectors.toList());
         exchange.setProperty("productIds", String.join(",", productIds));
+        exchange.setProperty("orderProducts", orderProducts);
     }
 }

@@ -23,6 +23,18 @@ public class ProcessProductsInfo implements Processor {
         String orderResponse = exchange.getIn().getBody(String.class);
         List<ProductResponse> products = objectMapper.readValue(orderResponse, new TypeReference<List<ProductResponse>>(){});
 
+        List<OrderProductsResponse> orderProducts = (List<OrderProductsResponse>) exchange.getProperty("orderProducts");
+
+        products.stream().forEach(product ->
+            product.setQuantity(
+                    orderProducts
+                            .stream()
+                            .filter(orderProductsResponse -> orderProductsResponse.getProduct_id() == product.getId())
+                            .findFirst()
+                            .get()
+                            .getCount())
+        );
+
         exchange.setProperty("products", products);
     }
 }

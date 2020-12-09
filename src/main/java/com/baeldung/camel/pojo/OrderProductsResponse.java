@@ -8,7 +8,7 @@ public class OrderProductsResponse implements Serializable {
     private int id;
     private int product_id;
     private String value;
-    private String count;
+    private int count;
     private Date created_at;
     private Date updated_at;
     private int order_id;
@@ -37,11 +37,11 @@ public class OrderProductsResponse implements Serializable {
         this.value = value;
     }
 
-    public String getCount() {
+    public int getCount() {
         return count;
     }
 
-    public void setCount(String count) {
+    public void setCount(int count) {
         this.count = count;
     }
 
