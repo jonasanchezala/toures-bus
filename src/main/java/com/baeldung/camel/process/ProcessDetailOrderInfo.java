@@ -37,5 +37,6 @@ public class ProcessDetailOrderInfo implements Processor {
         orderDetailResponse.setProductResponses(products);
 
         exchange.getOut().setBody(orderDetailResponse);
+        exchange.removeProperties("order", "userName", "products");
     }
 }

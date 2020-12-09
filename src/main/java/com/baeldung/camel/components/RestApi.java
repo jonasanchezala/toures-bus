@@ -123,6 +123,7 @@ public class RestApi extends RouteBuilder {
                 .end();
 
         from("direct:processDetailOrderInfo")
+                .removeHeaders("CamelHttp*")
                 .process(new ProcessDetailOrderInfo())
                 .end();
 

@@ -18,7 +18,33 @@ public class ProductResponse {
     private String transportSupplier;
     private String lodgingType;
     private String lodgingSupplier;
-    private String imageUrl;
+    private String url;
+    private String desc_prod;
+    private int quantity;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getDesc_prod() {
+        return desc_prod;
+    }
+
+    public void setDesc_prod(String desc_prod) {
+        this.desc_prod = desc_prod;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public int getId() {
         return id;
@@ -122,13 +148,5 @@ public class ProductResponse {
 
     public void setLodgingSupplier(String lodgingSupplier) {
         this.lodgingSupplier = lodgingSupplier;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 }
