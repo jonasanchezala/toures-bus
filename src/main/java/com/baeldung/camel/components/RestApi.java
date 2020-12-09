@@ -64,7 +64,8 @@ public class RestApi extends RouteBuilder {
                 .tracing()
                 .to("direct:getOrdersByClient")
                 .to("direct:getUserInfo")
-                .to("direct:processOrderUserInfo");
+                .to("direct:processOrderUserInfo")
+                .end();
 
 
         from("direct:getDetailOrderInfo")
@@ -74,7 +75,8 @@ public class RestApi extends RouteBuilder {
                 .to("direct:getUserInfo")
                 .to("direct:getOrderProducts")
                 .to("direct:getProductsInfo")
-                .to("direct:processDetailOrderInfo");
+                .to("direct:processDetailOrderInfo")
+                .end();
 
 
         from("direct:getOrdersByClient")
